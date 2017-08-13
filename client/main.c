@@ -11,7 +11,7 @@
 
 #include "../common/ErrorHelper.h"
 #include "../common/TCPClientUtility.h"
-#include "../common/LoginProtocol.h"
+//#include "../common/LoginProtocol.h"
 #include "../common/ErrorProtocol.h"
 #include "../common/DelimiterFramer.h"
 #include "../common/LoginEncodingText.h"
@@ -38,7 +38,7 @@ int main()
 
 	// Encode for transmission
 	uint8_t outbuf[MAX_WIRE_SIZE];
-	size_t reqSize = encode(&loginRequest, outbuf, MAX_WIRE_SIZE);
+	size_t reqSize = encodeLoginRequest(&loginRequest, outbuf, MAX_WIRE_SIZE);
 
 	// Print info
 	printf("Sending %lu-byte with login %s...\n", reqSize, loginRequest.login);
@@ -52,9 +52,12 @@ int main()
 	uint8_t inbuf[MAX_WIRE_SIZE];
 	size_t respSize = getNextMesage(socketStream, inbuf, MAX_WIRE_SIZE); // Get the message
 
-	if (decode(inbuf, respSize, &loginRequest))
+	LoginResponse loginResponse;
+	memset(&loginResponse, 0, sizeof(loginResponse));
+
+	if (decodeLoginResponse(inbuf, respSize, &loginResponse))
    	{
-		printf("login=%s", loginRequest.login);
+		printf("login=%s", loginResponse.token);
 	}
 
 	// Close up
