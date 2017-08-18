@@ -20,6 +20,7 @@
 #include "../common/LoginEncodingText.h"
 #include "../common/ErrorHelper.h"
 #include "../common/DelimiterFramer.h"
+#include "users.h"
 
 int main(int argc, char *argv[]) 
 {
@@ -27,9 +28,8 @@ int main(int argc, char *argv[])
 		dieWithUserMessage("Parameter(s)", "<Server Port/Service>");
 
 	int servSock = setupTCPServerSocket(argv[1]);
-	// servSock is now ready to use to accept connections
 
-	for (;;) { // Run forever
+	for (;;) {
 
 		// Wait for a client to connect
 		int clntSock = acceptTCPConnection(servSock);
@@ -79,6 +79,5 @@ int main(int argc, char *argv[])
 		}
 		puts("Client finished");
 		fclose(channel);
-	} // Each client
-	// NOT REACHED
+	}
 }
