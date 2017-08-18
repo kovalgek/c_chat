@@ -1,0 +1,53 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+BASE	common/LoginEncodingText.c	/^	BASE = 10$/;"	e	enum:__anon1	file:
+BUFSIZE	common/TCPServerUtility.c	/^static const int BUFSIZE = 1024;$/;"	v	file:
+DELIMITER	common/DelimiterFramer.c	/^static const char DELIMITER = '\\n';$/;"	v	file:
+DELIMSTR	common/LoginEncodingText.c	/^static const char *DELIMSTR = " ";$/;"	v	file:
+ErrorInfo	common/ErrorProtocol.h	/^struct ErrorInfo $/;"	s
+ErrorInfo	common/ErrorProtocol.h	/^typedef struct ErrorInfo ErrorInfo;$/;"	t	typeref:struct:ErrorInfo
+LoginRequest	common/LoginProtocol.h	/^struct LoginRequest$/;"	s
+LoginRequest	common/LoginProtocol.h	/^typedef struct LoginRequest LoginRequest;$/;"	t	typeref:struct:LoginRequest
+LoginResponse	common/LoginProtocol.h	/^struct LoginResponse$/;"	s
+LoginResponse	common/LoginProtocol.h	/^typedef struct LoginResponse LoginResponse;$/;"	t	typeref:struct:LoginResponse
+MAGIC	common/LoginEncodingText.c	/^static const char *MAGIC = "Login";$/;"	v	file:
+MAXPENDING	common/TCPServerUtility.c	/^static const int MAXPENDING = 5; \/\/ Maximum outstanding connection requests$/;"	v	file:
+MAX_ERROR_DESCRIPTION	common/ErrorProtocol.h	/^const int MAX_ERROR_DESCRIPTION = 128;$/;"	v
+MAX_LOGIN_SIZE	common/LoginProtocol.h	/^static const int MAX_LOGIN_SIZE = 128;$/;"	v
+MAX_NAME	server/users.h	/^static const int MAX_NAME = 128;$/;"	v
+MAX_TOKEN	server/users.h	/^static const int MAX_TOKEN = 128;$/;"	v
+MAX_TOKEN_SIZE	common/LoginProtocol.h	/^static const int MAX_TOKEN_SIZE = 128;$/;"	v
+MAX_WIRE_SIZE	common/LoginProtocol.h	/^static const int MAX_WIRE_SIZE = 500;$/;"	v
+User	server/users.h	/^struct User$/;"	s
+User	server/users.h	/^typedef struct User User;$/;"	t	typeref:struct:User
+acceptTCPConnection	common/TCPServerUtility.c	/^int acceptTCPConnection(int serverSocket)$/;"	f
+addUser	server/users.c	/^bool addUser(const char *name, const char *token)$/;"	f
+decodeLoginRequest	common/LoginEncodingText.c	/^bool decodeLoginRequest(uint8_t *inputBuffer, const size_t size, LoginRequest *loginRequest) $/;"	f
+decodeLoginResponse	common/LoginEncodingText.c	/^bool decodeLoginResponse(uint8_t *inputBuffer, const size_t size, LoginResponse *loginResponse) $/;"	f
+description	common/ErrorProtocol.h	/^	char description[MAX_ERROR_DESCRIPTION];$/;"	m	struct:ErrorInfo
+dieWithSystemMessage	common/ErrorHelper.c	/^void dieWithSystemMessage(const char *message) $/;"	f
+dieWithUserMessage	common/ErrorHelper.c	/^void dieWithUserMessage(const char *message, const char *detail) $/;"	f
+encodeLoginRequest	common/LoginEncodingText.c	/^size_t encodeLoginRequest(const LoginRequest *loginRequest, uint8_t *outputBuffer, const size_t bufferSize) $/;"	f
+encodeLoginResponse	common/LoginEncodingText.c	/^size_t encodeLoginResponse(const LoginResponse *loginResponse, uint8_t *outputBuffer, const size_t bufferSize) $/;"	f
+findByName	server/users.c	/^User *findByName(const char *name)$/;"	f
+findByToken	server/users.c	/^User *findByToken(const char *token)$/;"	f
+getNextMesage	common/DelimiterFramer.c	/^int getNextMesage(FILE *in, uint8_t *buffer, size_t bufferSize)$/;"	f
+handleTCPClient	common/TCPServerUtility.c	/^void handleTCPClient(int clientSocket) $/;"	f
+head	server/users.c	/^struct User *head;$/;"	v	typeref:struct:User
+login	common/LoginProtocol.h	/^	char login[MAX_LOGIN_SIZE];$/;"	m	struct:LoginRequest
+main	client/main.c	/^int main() $/;"	f
+main	server/main.c	/^int main(int argc, char *argv[]) $/;"	f
+name	server/users.h	/^	char name[MAX_NAME];$/;"	m	struct:User
+next	server/users.h	/^	struct User *next;$/;"	m	struct:User	typeref:struct:User::User
+number	common/ErrorProtocol.h	/^	unsigned int number;$/;"	m	struct:ErrorInfo
+printSocketAddress	common/AddressUtility.c	/^void printSocketAddress(const struct sockaddr *address, FILE *stream)$/;"	f
+putMessage	common/DelimiterFramer.c	/^int putMessage(uint8_t buffer[], size_t messageSize, FILE *out)$/;"	f
+removeByName	server/users.c	/^bool removeByName(const char *name)$/;"	f
+setupTCPClientSocket	common/TCPClientUtility.c	/^int setupTCPClientSocket(const char *host, const char *service) $/;"	f
+setupTCPServerSocket	common/TCPServerUtility.c	/^int setupTCPServerSocket(const char *service) $/;"	f
+token	common/LoginProtocol.h	/^	char token[MAX_TOKEN_SIZE];$/;"	m	struct:LoginResponse
+token	server/users.h	/^	char token[MAX_TOKEN];$/;"	m	struct:User

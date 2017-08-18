@@ -16,11 +16,11 @@
 #include <arpa/inet.h>
 
 #include "../common/TCPServerUtility.h"
-//#include "../common/LoginProtocol.h"
 #include "../common/LoginEncodingText.h"
 #include "../common/ErrorHelper.h"
 #include "../common/DelimiterFramer.h"
 #include "users.h"
+#include <uuid/uuid.h>
 
 int main(int argc, char *argv[]) 
 {
@@ -54,9 +54,18 @@ int main(int argc, char *argv[])
 		   	{ 
 				printf("login: %s", loginRequest.login);
 
+                uuid_t uuid;
+                uuid_generate_time(uuid);
+
+                char uuid_str[37];
+                uuid_unparse_lower(uuid, uuid_str);
+                printf("generate uuid=%s\n", uuid_str);
+			    addUser(loginRequest.login, uuid_str);
+                printUsers();
+
 				LoginResponse loginResponse;
 			    memset(&loginResponse, 0, sizeof(loginResponse));
-				strcpy(loginResponse.token, "12317239812730912873");
+				strcpy(loginResponse.token, uuid_str);
 
 				uint8_t outBuf[MAX_WIRE_SIZE];
 				mSize = encodeLoginResponse(&loginResponse, outBuf, MAX_WIRE_SIZE);

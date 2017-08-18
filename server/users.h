@@ -15,3 +15,4 @@ bool removeByName(const char *name);
 bool addUser(const char *name, const char *token);
 User *findByToken(const char *token);
 User *findByName(const char *name);
+void printUsers();

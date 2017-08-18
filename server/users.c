@@ -89,3 +89,17 @@ bool addUser(const char *name, const char *token)
 	head = user;
 	return true;	
 }
+
+void printUsers() 
+{
+   User *current = head;
+   printf("\n[ ");
+	
+   while(current != NULL) {
+      printf("(%s,%s) ",current->name, current->token);
+	  current = current->next;
+   }
+	
+   printf(" ]");
+}
+
