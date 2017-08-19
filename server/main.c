@@ -17,6 +17,7 @@
 
 #include "../common/TCPServerUtility.h"
 #include "../common/LoginEncodingText.h"
+#include "../common/MessageEncodingText.h"
 #include "../common/ErrorHelper.h"
 #include "../common/DelimiterFramer.h"
 #include "users.h"

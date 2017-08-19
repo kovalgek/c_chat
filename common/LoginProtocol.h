@@ -1,10 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "inttypes.h"
-
-static const int MAX_LOGIN_SIZE = 128;
-static const int MAX_TOKEN_SIZE = 128;
-static const int MAX_WIRE_SIZE = 500;
+#include "Consts.h"
 
 // Login request
 struct LoginRequest
