@@ -127,11 +127,16 @@ void handleTCPServer(int clntSocket)
         }
         else if (decodeClientMessage(inBuf, mSize, &clientMessage))
         {
+            User *user = findByToken(clientMessage.token);
+            if (!user)
+            {
+                continue;
+            }
             
             ServerMessage serverMessage;
             memset(&serverMessage, 0, sizeof(ServerMessage));
-            strcpy(serverMessage.name, "Jopa");
-            strcpy(serverMessage.text, "qwe"/*clientMessage.text*/);
+            strcpy(serverMessage.name, user->name);
+            strcpy(serverMessage.text, clientMessage.text);
             
             
             uint8_t outBuf[MAX_WIRE_SIZE];
@@ -145,13 +150,13 @@ void handleTCPServer(int clntSocket)
             {
                 printf("Processed clientMessage name:%s text:%s\n", serverMessage.name, serverMessage.text);
             }
-            
         }
         else
         {
             fputs("Parse error, closing connection.\n", stderr);
             break;
         }
+        memset(&inBuf, 0, MAX_WIRE_SIZE);
     }
     puts("Client finished");
     //fclose(channel);

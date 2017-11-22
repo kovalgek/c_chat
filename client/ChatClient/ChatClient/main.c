@@ -38,25 +38,6 @@ int main()
         dieWithUserMessage("setupTCPClientSocket() failed", "unable to connect");
     }
     
-    
-    // Create separate memory for client argument
-    struct ThreadArgs *threadArgs = (struct ThreadArgs *) malloc(sizeof(struct ThreadArgs));
-    if (threadArgs == NULL)
-    {
-        dieWithSystemMessage("malloc() failed");
-    }
-    threadArgs->clntSock = socket;
-    
-    // Create client thread
-    pthread_t threadID;
-    int returnValue = pthread_create(&threadID, NULL, threadMain, threadArgs);
-    if (returnValue != 0)
-    {
-        dieWithUserMessage("pthread_create() failed", strerror(returnValue));
-    }
-
-    
-    
     // Wrap for stream I/O
     FILE *socketStream = fdopen(socket, "r+");
     if (socketStream == NULL)
@@ -85,20 +66,34 @@ int main()
     size_t mSize;
     uint8_t inbuf[MAX_WIRE_SIZE];
     Token token;
-    ServerMessage serverMessage;
     
     // Receive and print response
     
     while ((mSize = getNextMesage(socketStream, inbuf, MAX_WIRE_SIZE)) > 0)
     {
         memset(&token, 0, sizeof(Token));
-        memset(&serverMessage, 0, sizeof(ServerMessage));
         
         printf("Received message (%zu bytes)\n", mSize);
         
         if (decodeToken(inbuf, mSize, &token))
         {
             printf("token=%s\n", token.value);
+            
+            // Create separate memory for client argument
+            struct ThreadArgs *threadArgs = (struct ThreadArgs *) malloc(sizeof(struct ThreadArgs));
+            if (threadArgs == NULL)
+            {
+                dieWithSystemMessage("malloc() failed");
+            }
+            threadArgs->clntSock = socket;
+            
+            // Create client thread
+            pthread_t threadID;
+            int returnValue = pthread_create(&threadID, NULL, threadMain, threadArgs);
+            if (returnValue != 0)
+            {
+                dieWithUserMessage("pthread_create() failed", strerror(returnValue));
+            }
             
             char *line = NULL;  /* forces getline to allocate with malloc */
             size_t len = 0;     /* ignored when line = NULL */
@@ -127,15 +122,10 @@ int main()
                     else
                     {
                         printf("I'm here\n");
-                        break;
                     }
                 }
             }
             free (line);
-        }
-        else if (decodeServerMessage(inbuf, mSize, &serverMessage))
-        {
-            printf("%s: %s\n",serverMessage.name,serverMessage.text);
         }
     }
     
@@ -157,8 +147,31 @@ void *threadMain(void *threadArgs)
     return (NULL);
 }
 
-void handleMessages(int clntSocket)
+void handleMessages(int socket)
 {
+    // Receive and print response
     
+    size_t mSize;
+    uint8_t inbuf[MAX_WIRE_SIZE];
+    ServerMessage serverMessage;
+    
+    // Wrap for stream I/O
+    FILE *socketStream = fdopen(socket, "r+");
+    if (socketStream == NULL)
+    {
+        dieWithSystemMessage("fdopen() failed");
+    }
+    
+    while ((mSize = getNextMesage(socketStream, inbuf, MAX_WIRE_SIZE)) > 0)
+    {
+        memset(&serverMessage, 0, sizeof(ServerMessage));
+        printf("Received message (%zu bytes)\n", mSize);
+        
+        if (decodeServerMessage(inbuf, mSize, &serverMessage))
+        {
+            printf("%s: %s\n",serverMessage.name,serverMessage.text);
+        }
+        memset(&inbuf, 0, MAX_WIRE_SIZE);
+    }
 }
 
