@@ -13,72 +13,104 @@ enum {
 	BASE = 10
 };
 
-size_t encodeMessageClient(const MessageClient *messageClient, uint8_t *outputBuffer, const size_t bufferSize)
+size_t encodeClientMessage(const ClientMessage *clientMessage, uint8_t *outputBuffer, const size_t bufferSize)
 {
 	uint8_t *bufferPtr = outputBuffer;
 	long size = (size_t) bufferSize;
-	int rv = snprintf((char *) bufferPtr, size, "%s %s %s", MAGIC, messageClient->token, messageClient->text);
+	int rv = snprintf((char *) bufferPtr, size, "%s %s %s", MAGIC, clientMessage->token, clientMessage->text);
 
 	bufferPtr += rv;
 	size -= rv;
 	return (size_t) (bufferPtr - outputBuffer);
 }
 
-bool decodeMessageClient(uint8_t *inputBuffer, const size_t size, MessageClient *messageClient)
+bool decodeClientMessage(uint8_t *inputBuffer, const size_t size, ClientMessage *clientMessage)
 {
-	char *token = strtok((char *) inputBuffer, DELIMSTR);
-
+    printf("0decodeMessageClient %s\n",(char *) inputBuffer);
+    
+    char *buffer = calloc(strlen((char *)inputBuffer) + 1, sizeof(char));
+    strcpy(buffer, (char *)inputBuffer);
+    
+	char *token = strtok(buffer, DELIMSTR);
+    
 	// Check for magic
 	if (token == NULL || strcmp(token, MAGIC) != 0)
-		return false; 
+    {
+		return false;
+    }
+    
+    printf("1decodeMessageClient %s\n",token);
 
 	// Get token 
 	token = strtok(NULL, DELIMSTR);
 	if (token == NULL)
+    {
 		return false;
+    }
+    
+    printf("2decodeMessageClient %s\n",token);
 
-    strcpy(messageClient->token, token);
+    strcpy(clientMessage->token, token);
 
 	// Get text 
 	token = strtok(NULL, DELIMSTR);
 	if (token == NULL)
+    {
 		return false;
+    }
+    
+    printf("3decodeMessageClient %s\n",token);
 
-    strcpy(messageClient->text, token);
+    strcpy(clientMessage->text, token);
 	return true;
 }
 
-size_t encodeMessageServer(const MessageServer *messageServer, uint8_t *outputBuffer, const size_t bufferSize)
+size_t encodeServerMessage(const ServerMessage *serverMessage, uint8_t *outputBuffer, const size_t bufferSize)
 {
 	uint8_t *bufferPtr = outputBuffer;
 	long size = (size_t) bufferSize;
-	int rv = snprintf((char *) bufferPtr, size, "%s %s %s", MAGIC, messageServer->name, messageServer->text);
+	int rv = snprintf((char *) bufferPtr, size, "%s %s %s", MAGIC, serverMessage->name, serverMessage->text);
 
 	bufferPtr += rv;
 	size -= rv;
 	return (size_t) (bufferPtr - outputBuffer);
 }
 
-bool decodeMessageServer(uint8_t *inputBuffer, const size_t size, MessageServer *messageServer)
+bool decodeServerMessage(uint8_t *inputBuffer, const size_t size, ServerMessage *serverMessage)
 {
-	char *token = strtok((char *) inputBuffer, DELIMSTR);
+    char *buffer = calloc(strlen((char *)inputBuffer) + 1, sizeof(char));
+    strcpy(buffer, (char *)inputBuffer);
+    
+	char *token = strtok(buffer, DELIMSTR);
 
 	// Check for magic
 	if (token == NULL || strcmp(token, MAGIC) != 0)
-		return false; 
+    {
+		return false;
+    }
+    
+    printf("1decodeMessageServer %s\n",token);
 
 	// Get token 
 	token = strtok(NULL, DELIMSTR);
 	if (token == NULL)
+    {
 		return false;
+    }
 
-    strcpy(messageServer->name, token);
+    printf("2decodeMessageServer %s\n",token);
+    
+    strcpy(serverMessage->name, token);
 
 	// Get text 
 	token = strtok(NULL, DELIMSTR);
 	if (token == NULL)
+    {
 		return false;
+    }
+    
+    printf("3decodeMessageServer %s\n",token);
 
-    strcpy(messageServer->text, token);
+    strcpy(serverMessage->text, token);
 	return true;
 }

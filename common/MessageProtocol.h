@@ -4,18 +4,18 @@
 #include "Consts.h"
 
 // Message Client 
-struct MessageClient
+struct ClientMessage
 {
 	char token[MAX_TOKEN_SIZE];
 	char text[MAX_TEXT_SIZE];
 };
-typedef struct MessageClient MessageClient; 
+typedef struct ClientMessage ClientMessage; 
 
 // Message Server 
-struct MessageServer
+struct ServerMessage
 {
 	char name[MAX_LOGIN_SIZE];
 	char text[MAX_TEXT_SIZE];
 };
-typedef struct MessageServer MessageServer; 
+typedef struct ServerMessage ServerMessage; 
 

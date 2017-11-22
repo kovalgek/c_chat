@@ -11,10 +11,10 @@
 
 #include "../common/ErrorHelper.h"
 #include "../common/TCPClientUtility.h"
-//#include "../common/LoginProtocol.h"
 #include "../common/ErrorProtocol.h"
 #include "../common/DelimiterFramer.h"
 #include "../common/LoginEncodingText.h"
+#include "../common/MessageEncodingText.h"
 
 int main() 
 {
@@ -32,9 +32,7 @@ int main()
 
     LoginRequest loginRequest;
 	memset(&loginRequest, 0, sizeof(loginRequest));
-
     strcpy(loginRequest.login, "kovalgek");
-
 
 	// Encode for transmission
 	uint8_t outbuf[MAX_WIRE_SIZE];
@@ -42,7 +40,6 @@ int main()
 
 	// Print info
 	printf("Sending %lu-byte with login %s...\n", reqSize, loginRequest.login);
-
 
 	// Frame and send
 	if (putMessage(outbuf, reqSize, socketStream) < 0)
@@ -58,10 +55,32 @@ int main()
 	if (decodeLoginResponse(inbuf, respSize, &loginResponse))
    	{
 		printf("login=%s", loginResponse.token);
+	
+		char *line = NULL;  /* forces getline to allocate with malloc */
+		size_t len = 0;     /* ignored when line = NULL */
+        ssize_t read;
+
+        printf ("\nEnter string below [ctrl + d] to quit\n");
+
+        while ((read = getline(&line, &len, stdin)) != -1) 
+		{
+            if (read > 0) 
+			{    
+                MessageClient messageClient;
+				memset(&messageClient, 0, sizeof(messageClient));
+
+				strcpy(messageClient.token, loginResponse.token);
+				strcpy(messageClient.text, line);
+
+	uint8_t outbuf[MAX_WIRE_SIZE];
+	            size_t reqSize = encodeMessageClient(&messageClient, outbuf, MAX_WIRE_SIZE);
+	            if (putMessage(outbuf, reqSize, socketStream) < 0)
+             		dieWithSystemMessage("putMessage() failed");
+			}
+        }
+        free (line); 
 	}
 
-	// Close up
 	fclose(socketStream);
-
 	exit(0);
 }

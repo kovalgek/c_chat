@@ -44,5 +44,5 @@ int putMessage(uint8_t buffer[], size_t messageSize, FILE *out)
 		return -1;
 	fputc(DELIMITER, out);
 	fflush(out);
-	return messageSize;
+	return (int)messageSize;
 }

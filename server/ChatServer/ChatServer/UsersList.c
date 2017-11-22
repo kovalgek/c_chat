@@ -1,33 +1,41 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "users.h"
+#include "UsersList.h"
 
-struct User *head;
+struct User *userHead;
 
 bool removeByName(const char *name)
 {
-   User *current = head;
+   User *current = userHead;
    User *previous = NULL;
 	
    //if list is empty
-   if(head == NULL) {
+   if(userHead == NULL)
+   {
       return false;
    }
 
    //navigate through list
-   while(strcmp(current->name, name)) {
-      if(current->next == NULL) {
+   while(strcmp(current->name, name))
+   {
+      if(current->next == NULL)
+      {
          return false;
-      } else {
+      }
+      else
+      {
          previous = current;
          current = current->next;
       }
    }
 
-   if(current == head) {
-      head = head->next;
-   } else {
+   if(current == userHead)
+   {
+      userHead = userHead->next;
+   }
+   else
+   {
       previous->next = current->next;
    }    
 
@@ -37,17 +45,21 @@ bool removeByName(const char *name)
 
 User *findByName(const char *name)
 {
-   User *current = head;
+   User *current = userHead;
 
-   if(head == NULL) {
+   if(userHead == NULL)
+   {
       return NULL;
    }
 
-   while(strcmp(current->name, name)) {
-	
-      if(current->next == NULL) {
+   while(strcmp(current->name, name))
+   {
+      if(current->next == NULL)
+      {
          return NULL;
-      } else {
+      }
+      else
+      {
          current = current->next;
       }
    }      
@@ -57,17 +69,21 @@ User *findByName(const char *name)
 
 User *findByToken(const char *token)
 {
-   User *current = head;
+   User *current = userHead;
 
-   if(head == NULL) {
+   if(userHead == NULL)
+   {
       return NULL;
    }
 
-   while(strcmp(current->token, token)) {
-	
-      if(current->next == NULL) {
+   while(strcmp(current->token, token))
+   {
+      if(current->next == NULL)
+      {
          return NULL;
-      } else {
+      }
+      else
+      {
          current = current->next;
       }
    }      
@@ -78,24 +94,27 @@ User *findByToken(const char *token)
 bool addUser(const char *name, const char *token)
 {
 	if (findByName(name) || findByToken(token))
+    {
 		return false;
+    }
 
 	User *user = (User *)malloc(sizeof(User));
 
 	strcpy(user->name, name);
 	strcpy(user->token, token);
 
-    user->next = head;
-	head = user;
+    user->next = userHead;
+	userHead = user;
 	return true;	
 }
 
 void printUsers() 
 {
-   User *current = head;
+   User *current = userHead;
    printf("\n[ ");
 	
-   while(current != NULL) {
+   while(current != NULL)
+   {
       printf("(%s,%s) ",current->name, current->token);
 	  current = current->next;
    }

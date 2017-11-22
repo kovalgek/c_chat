@@ -1,0 +1,2 @@
+server.out: main.c ../common/TCPServerUtility.c ../common/LoginEncodingText.c ../common/ErrorHelper.c ../common/DelimiterFramer.c ../common/AddressUtility.c ../common/MessageEncodingText.c users.c
+	gcc -o server.out main.c ../common/TCPServerUtility.c ../common/LoginEncodingText.c ../common/ErrorHelper.c ../common/DelimiterFramer.c ../common/AddressUtility.c ../common/MessageEncodingText.c users.c -I. 

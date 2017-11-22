@@ -18,60 +18,82 @@ enum {
 	BASE = 10
 };
 
-size_t encodeLoginRequest(const LoginRequest *loginRequest, uint8_t *outputBuffer, const size_t bufferSize) 
+size_t encodeLogin(const Login *login, uint8_t *outputBuffer, const size_t bufferSize) 
 {
 	uint8_t *bufferPtr = outputBuffer;
 	long size = (size_t) bufferSize;
-	int rv = snprintf((char *) bufferPtr, size, "%s %s", MAGIC, loginRequest->login);
+	int rv = snprintf((char *) bufferPtr, size, "%s %s", MAGIC, login->value);
 
 	bufferPtr += rv;
 	size -= rv;
 	return (size_t) (bufferPtr - outputBuffer);
 }
 
-bool decodeLoginRequest(uint8_t *inputBuffer, const size_t size, LoginRequest *loginRequest) 
+bool decodeLogin(uint8_t *inputBuffer, const size_t size, Login *login) 
 {
-	char *token = strtok((char *) inputBuffer, DELIMSTR);
+    char *buffer = calloc(strlen((char *)inputBuffer) + 1, sizeof(char));
+    strcpy(buffer, (char *)inputBuffer);
+    
+	char *token = strtok(buffer, DELIMSTR);
 
 	// Check for magic
 	if (token == NULL || strcmp(token, MAGIC) != 0)
-		return false; 
+    {
+		return false;
+    }
+    
+    printf("1decodeLoginRequest %s\n",token);
 
 	// Get indicator
 	token = strtok(NULL, DELIMSTR);
 	if (token == NULL)
+    {
 		return false;
+    }
 
-    strcpy(loginRequest->login, token);
+    printf("2decodeLoginRequest %s\n",token);
+    
+    strcpy(login->value, token);
 
 	return true;
 }
 
-size_t encodeLoginResponse(const LoginResponse *loginResponse, uint8_t *outputBuffer, const size_t bufferSize) 
+size_t encodeToken(const Token *loginResponse, uint8_t *outputBuffer, const size_t bufferSize) 
 {
 	uint8_t *bufferPtr = outputBuffer;
 	long size = (size_t) bufferSize;
-	int rv = snprintf((char *) bufferPtr, size, "%s %s", MAGIC, loginResponse->token);
+	int rv = snprintf((char *) bufferPtr, size, "%s %s", MAGIC, loginResponse->value);
 
 	bufferPtr += rv;
 	size -= rv;
 	return (size_t) (bufferPtr - outputBuffer);
 }
 
-bool decodeLoginResponse(uint8_t *inputBuffer, const size_t size, LoginResponse *loginResponse) 
+bool decodeToken(uint8_t *inputBuffer, const size_t size, Token *token) 
 {
-	char *token = strtok((char *) inputBuffer, DELIMSTR);
-
+    char *buffer = calloc(strlen((char *)inputBuffer) + 1, sizeof(char));
+    strcpy(buffer, (char *)inputBuffer);
+    
+    char *tokenString = strtok((char *) buffer, DELIMSTR);
+    
 	// Check for magic
-	if (token == NULL || strcmp(token, MAGIC) != 0)
-		return false; 
+	if (token == NULL || strcmp(tokenString, MAGIC) != 0)
+    {
+		return false;
+    }
+    
+    printf("1decodeLoginResponse %s\n",tokenString);
 
 	// Get indicator
-	token = strtok(NULL, DELIMSTR);
-	if (token == NULL)
+	tokenString = strtok(NULL, DELIMSTR);
+	if (tokenString == NULL)
+    {
 		return false;
+    }
+    
+    printf("2decodeLoginResponse %s\n",tokenString);
 
-    strcpy(loginResponse->token, token);
+    strcpy(token->value, tokenString);
 
 	return true;
 }

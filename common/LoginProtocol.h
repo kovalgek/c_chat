@@ -4,15 +4,15 @@
 #include "Consts.h"
 
 // Login request
-struct LoginRequest
+struct Login
 {
-	char login[MAX_LOGIN_SIZE];
+	char value[MAX_LOGIN_SIZE];
 };
-typedef struct LoginRequest LoginRequest;
+typedef struct Login Login;
 
 // Login response
-struct LoginResponse
+struct Token
 {
-	char token[MAX_TOKEN_SIZE];
+	char value[MAX_TOKEN_SIZE];
 };
-typedef struct LoginResponse LoginResponse;
+typedef struct Token Token;
